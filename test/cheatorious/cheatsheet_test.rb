@@ -36,7 +36,7 @@ class Cheatorious::CheatSheetTest < Test::Unit::TestCase
 
   def test_cheatsheet_simple_entry
     c = Cheatorious::CheatSheet.compile("VIM") do
-      ___ "Save file", ":w"
+      __ "Save file", ":w"
     end
     
     assert_equal ":w", c[:cheatsheet][:root][:entries]["Save file"].first
@@ -44,7 +44,7 @@ class Cheatorious::CheatSheetTest < Test::Unit::TestCase
   
   def test_cheatsheet_simple_entry_with_several_options
     c = Cheatorious::CheatSheet.compile("VIM") do
-      ___ "Go to insertion mode", "i", "I", "a"
+      __ "Go to insertion mode", "i", "I", "a"
     end
     
     assert_equal "i", c[:cheatsheet][:root][:entries]["Go to insertion mode"][0]
@@ -55,8 +55,8 @@ class Cheatorious::CheatSheetTest < Test::Unit::TestCase
   def test_cheatsheet_section
     c = Cheatorious::CheatSheet.compile("VIM") do
       section "Files" do
-        ___ "Save file", ":w"
-        ___ "Open file", ":e"
+        __ "Save file", ":w"
+        __ "Open file", ":e"
       end
     end
     
@@ -67,10 +67,10 @@ class Cheatorious::CheatSheetTest < Test::Unit::TestCase
   def test_cheatsheet_section_inside_section
     c = Cheatorious::CheatSheet.compile("VIM") do
       section "Files" do
-        ___ "Open file", ":e"
+        __ "Open file", ":e"
         
         section "Saving" do
-          ___ "Save file", ":w"
+          __ "Save file", ":w"
         end
       end
     end
@@ -83,7 +83,7 @@ class Cheatorious::CheatSheetTest < Test::Unit::TestCase
     c = Cheatorious::CheatSheet.compile("VIM") do
       key :control, "^"
       
-      ___ "Scroll line up", _control("E")
+      __ "Scroll line up", _control("E")
     end
     
     assert_equal "^E", c[:cheatsheet][:root][:entries]["Scroll line up"].first
@@ -93,7 +93,7 @@ class Cheatorious::CheatSheetTest < Test::Unit::TestCase
     c = Cheatorious::CheatSheet.compile("VIM") do
       key :control, "^"
       
-      ___ "Scroll line up, down", _control("E"), (_control "Y")
+      __ "Scroll line up, down", _control("E"), (_control "Y")
     end
     
     assert_equal "^E", c[:cheatsheet][:root][:entries]["Scroll line up, down"][0]
@@ -108,8 +108,8 @@ class Cheatorious::CheatSheetTest < Test::Unit::TestCase
       key :shift  , "SHIFT"
       key :alt    , "ALT"
       
-      ___ "Do something crazy"   , (_control _shift _alt "A")
-      ___ "Just pressing control", _control
+      __ "Do something crazy"   , (_control _shift _alt "A")
+      __ "Just pressing control", _control
     end
     
     assert_equal "^+SHIFT+ALT+A", c[:cheatsheet][:root][:entries]["Do something crazy"][0]

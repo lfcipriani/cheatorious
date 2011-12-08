@@ -59,7 +59,7 @@ module Cheatorious
       @current_section = parent_section
     end
     
-    def ___(name, *values)
+    def __(name, *values)
       @current_section[:entries] = {} unless @current_section.key?(:entries)
       @current_section[:entries][name] = [] unless @current_section[:entries].key?(name)
       values.each do |v|
