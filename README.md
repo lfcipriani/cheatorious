@@ -1,5 +1,8 @@
-# Cheatorious
+# cheatorious
 
-generator of simple, searchable, command line cheatsheets
+_Being victorious through a means so amazing it cannot possibly be achieved without cheating._ 
+(Urban Dictionary)
 
-This gem is not ready yet, more info comming soon...
+*cheatorious* is a generator of simple, searchable, shareable, modular command-line cheatsheets.
+
+more details comming soon...
