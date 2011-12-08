@@ -1,0 +1,5 @@
+.bundle
+*.gem
+coverage/
+Gemfile.lock
+GEM_VERSION

@@ -1,0 +1,6 @@
+#!/usr/bin/env ruby
+# File: script/console
+irb = RUBY_PLATFORM =~ /(:?mswin|mingw)/ ? 'irb.bat' : 'irb'
+libs = " -r #{File.expand_path("../cheatorious_console.rb", __FILE__)}"
+puts "Loading gem development environment..."
+exec "#{irb} #{libs} --simple-prompt #{ARGV.join("")}"
