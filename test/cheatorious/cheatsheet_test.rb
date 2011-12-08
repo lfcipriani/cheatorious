@@ -44,11 +44,7 @@ class Cheatorious::CheatSheetTest < Test::Unit::TestCase
   
   def test_cheatsheet_simple_entry_with_several_options
     c = Cheatorious::CheatSheet.compile("VIM") do
-      ___ ("Go to insertion mode") {
-        __ "i"
-        __ "I"
-        __ "a"
-      }
+      ___ "Go to insertion mode", "i", "I", "a"
     end
     
     assert_equal "i", c[:cheatsheet][:root][:entries]["Go to insertion mode"][0]
@@ -81,6 +77,43 @@ class Cheatorious::CheatSheetTest < Test::Unit::TestCase
     
     assert_equal ":w", c[:cheatsheet][:root][:sections]["Files"][:sections]["Saving"][:entries]["Save file"].first
     assert_equal ":e", c[:cheatsheet][:root][:sections]["Files"][:entries]["Open file"].first
+  end
+
+  def test_cheatsheet_keyboard_key_configurations
+    c = Cheatorious::CheatSheet.compile("VIM") do
+      key :control, "^"
+      
+      ___ "Scroll line up", _control("E")
+    end
+    
+    assert_equal "^E", c[:cheatsheet][:root][:entries]["Scroll line up"].first
+  end
+  
+  def test_cheatsheet_keyboard_key_multiple_configurations
+    c = Cheatorious::CheatSheet.compile("VIM") do
+      key :control, "^"
+      
+      ___ "Scroll line up, down", _control("E"), (_control "Y")
+    end
+    
+    assert_equal "^E", c[:cheatsheet][:root][:entries]["Scroll line up, down"][0]
+    assert_equal "^Y", c[:cheatsheet][:root][:entries]["Scroll line up, down"][1]
+  end
+  
+  def test_cheatsheet_keyboard_key_separators
+    c = Cheatorious::CheatSheet.compile("VIM") do
+      key_separator "+"
+      
+      key :control, "^"
+      key :shift  , "SHIFT"
+      key :alt    , "ALT"
+      
+      ___ "Do something crazy"   , (_control _shift _alt "A")
+      ___ "Just pressing control", _control
+    end
+    
+    assert_equal "^+SHIFT+ALT+A", c[:cheatsheet][:root][:entries]["Do something crazy"][0]
+    assert_equal "^"            , c[:cheatsheet][:root][:entries]["Just pressing control"][0]
   end
   
 end

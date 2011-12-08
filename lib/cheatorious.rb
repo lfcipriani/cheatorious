@@ -6,7 +6,7 @@ require "rubygems"
 require "bundler/setup"
 
 # Gem requirements
-require "cheatorious/cheatsheet"
 module Cheatorious
-  autoload :VERSION, 'cheatorious/version'
+  autoload :CheatSheet, "cheatorious/cheatsheet"
+  autoload :VERSION   , 'cheatorious/version'
 end
