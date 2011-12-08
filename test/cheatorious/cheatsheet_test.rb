@@ -116,4 +116,25 @@ class Cheatorious::CheatSheetTest < Test::Unit::TestCase
     assert_equal "^"            , c[:cheatsheet][:root][:entries]["Just pressing control"][0]
   end
   
+  def test_cheatsheet_reverse_index
+    c = Cheatorious::CheatSheet.compile("VIM") do
+      __ "Create asset", ":w"
+      
+      section "Files" do
+        __ "Open file", ":e"
+        
+        section "Saving" do
+          __ "Save file", ":w"
+        end
+      end
+    end
+    
+    assert_equal "Create asset"     , c[:cheatsheet][:reverse][":w"][0][:name]
+    assert_equal []                 , c[:cheatsheet][:reverse][":w"][0][:section]
+    assert_equal "Save file"        , c[:cheatsheet][:reverse][":w"][1][:name]
+    assert_equal ["Files", "Saving"], c[:cheatsheet][:reverse][":w"][1][:section]
+    assert_equal "Open file"        , c[:cheatsheet][:reverse][":e"][0][:name]
+    assert_equal ["Files"]          , c[:cheatsheet][:reverse][":e"][0][:section]
+  end
+  
 end

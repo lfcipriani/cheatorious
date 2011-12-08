@@ -16,11 +16,13 @@ module Cheatorious
       @keys       = {}
       @cheat_hash = {
         :cheatsheet => {
-          :root => {}
+          :root => {},
+          :reverse => {}
         }
       }
       @current_section = @cheat_hash[:cheatsheet][:root]
-      @separator = ""
+      @stack           = []
+      @separator       = ""
     end
     
     def compile!
@@ -54,7 +56,9 @@ module Cheatorious
       parent_section = @current_section
       @current_section = @current_section[:sections][name]
       
+      @stack.push(name)
       self.instance_eval(&block)
+      @stack.pop
       
       @current_section = parent_section
     end
@@ -64,6 +68,11 @@ module Cheatorious
       @current_section[:entries][name] = [] unless @current_section[:entries].key?(name)
       values.each do |v|
         @current_section[:entries][name] << v
+        reverse_entry = {
+          :name    => name,
+          :section => @stack.dup
+        }
+        reverse_index.key?(v) ? reverse_index[v] << reverse_entry : reverse_index[v] = [reverse_entry]
       end
     end
     
@@ -88,6 +97,10 @@ module Cheatorious
       @cheat_hash[:cheatsheet]
     end
 
+    def reverse_index
+      @cheat_hash[:cheatsheet][:reverse]
+    end
+
   end
 end
 
@@ -97,6 +110,10 @@ end
 #     :root => {
 #             :entries => { "Save File" => [":w"] },
 #             :sections => { "files" => {} }
+#      }
+#     :reverse => {
+#                ":w" => [{:name => 'blah', :section => []}, {}],
+#                ":e" => [{}]
 #             }
-#   }
+#
 # }
