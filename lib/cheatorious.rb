@@ -9,5 +9,6 @@ require "bundler/setup"
 module Cheatorious
   autoload :CheatSheet, "cheatorious/cheatsheet"
   autoload :Utils     , "cheatorious/utils"
+  autoload :Search    , "cheatorious/search"
   autoload :VERSION   , 'cheatorious/version'
 end
