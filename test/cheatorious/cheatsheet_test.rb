@@ -136,5 +136,38 @@ class Cheatorious::CheatSheetTest < Test::Unit::TestCase
     assert_equal "Open file"        , c[:cheatsheet][:reverse][":e"][0][:name]
     assert_equal ["Files"]          , c[:cheatsheet][:reverse][":e"][0][:section]
   end
+
+  def test_compile_support_serialization_to_bytes
+    c = Cheatorious::CheatSheet.compile("VIM", :bytes) do
+      __ "Create asset", ":w"
+      
+      section "Files" do
+        __ "Open file", ":e"
+        
+        section "Saving" do
+          __ "Save file", ":w"
+        end
+      end
+    end
+    obj = Cheatorious::Utils.deserialize(c)
+    
+    assert_equal "Create asset", obj[:cheatsheet][:reverse][":w"][0][:name]
+  end
   
+  def test_compile_support_serialization_to_base64
+    c = Cheatorious::CheatSheet.compile("VIM", :base64) do
+      __ "Create asset", ":w"
+      
+      section "Files" do
+        __ "Open file", ":e"
+        
+        section "Saving" do
+          __ "Save file", ":w"
+        end
+      end
+    end
+    obj = Cheatorious::Utils.deserialize(c, :base64)
+    
+    assert_equal "Create asset", obj[:cheatsheet][:reverse][":w"][0][:name]
+  end
 end

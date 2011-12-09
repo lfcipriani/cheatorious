@@ -2,9 +2,9 @@ module Cheatorious
   class CheatSheet
     
     class << self
-      def compile(name, &block)
+      def compile(name, output = nil, &block)
         c = self.new(name, &block)
-        c.compile!
+        c.compile!(output)
       end
     end
     
@@ -25,9 +25,9 @@ module Cheatorious
       @separator       = ""
     end
     
-    def compile!
+    def compile!(output = nil)
       self.instance_eval(&@block)
-      return @cheat_hash
+      return output ? Utils.serialize(@cheat_hash, output) : @cheat_hash
     end
     
     def description(info) 
