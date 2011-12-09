@@ -8,5 +8,6 @@ require "bundler/setup"
 # Gem requirements
 module Cheatorious
   autoload :CheatSheet, "cheatorious/cheatsheet"
+  autoload :Utils     , "cheatorious/utils"
   autoload :VERSION   , 'cheatorious/version'
 end
