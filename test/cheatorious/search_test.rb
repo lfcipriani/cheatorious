@@ -3,11 +3,11 @@ require File.expand_path(File.dirname(__FILE__) + '/../test_helper')
 
 class Cheatorious::SearchTest < Test::Unit::TestCase
 
-  def sample_reference
+  def cheatsheet_model
     return Cheatorious::CheatSheet.compile("Simple VIM") do
       
         description "A simple VIM cheatsheet for tests"
-        author      "Luis Cipriani"
+        author      "Luis Cipriani", "github.com/lfcipriani"
         version     "1.0.0"
       
         key_separator " "
@@ -40,9 +40,14 @@ class Cheatorious::SearchTest < Test::Unit::TestCase
     end
   end
 
-  def test_empty_search
-    # TODO tests
-    assert true
+  def test_empty_search_prints_full_cheatsheet
+    result = Cheatorious::Search.execute(cheatsheet_model)
+
+    assert_not_nil result.index("A simple VIM cheatsheet for tests")
+    assert_not_nil result.index("Enter insertion mode")
+    assert_not_nil result.index("Scrolling")
+    assert_not_nil result.index("^ E")
   end
+  
   
 end
