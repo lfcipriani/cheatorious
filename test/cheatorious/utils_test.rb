@@ -7,15 +7,12 @@ class Cheatorious::UtilsTest < Test::Unit::TestCase
     {
       "description" => "a description",
       :cheatsheet   => {
-        :root => {
-          :entries  => { "Save File" => [":w"] },
-          :sections => { 
-            "Files" => {
-              :entries  => { "Open file" => [":e"] },
-              :sections => {}
-            } 
-          }
-        },
+        :root => [
+          ["Save File", ":w"],
+          {"Files" => [
+            ["Open file",":e"]
+          ]}
+        ],        
         :reverse => {
            ":w" => [{:name => "Save file", :section => []}],
            ":e" => [{:name => "Open File", :section => ["Files"]}]
@@ -28,14 +25,21 @@ class Cheatorious::UtilsTest < Test::Unit::TestCase
     marshaled    = Cheatorious::Utils.serialize(cheat_hash)
     object_again = Cheatorious::Utils.deserialize(marshaled)
 
-    assert_equal ":e", object_again[:cheatsheet][:root][:sections]["Files"][:entries]["Open file"].first
+    assert_equal ":e", object_again[:cheatsheet][:root][1]["Files"][0][1]
   end
 
   def test_serialize_and_deserialize_with_base64
     base64ed     = Cheatorious::Utils.serialize(cheat_hash, :base64)
     object_again = Cheatorious::Utils.deserialize(base64ed, :base64)
     
-    assert_equal ":e", object_again[:cheatsheet][:root][:sections]["Files"][:entries]["Open file"].first
+    assert_equal ":e", object_again[:cheatsheet][:root][1]["Files"][0][1]
   end
   
+  def test_serialization_type
+    base64ed     = Cheatorious::Utils.serialize(cheat_hash, :base64)
+    marshaled    = Cheatorious::Utils.serialize(cheat_hash)
+    
+    assert_equal :base64, Cheatorious::Utils.serialization_type(base64ed)
+    assert_equal :bytes , Cheatorious::Utils.serialization_type(marshaled)
+  end
 end
