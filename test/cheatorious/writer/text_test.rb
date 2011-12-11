@@ -11,7 +11,7 @@ class Cheatorious::Writer::TextTest < Test::Unit::TestCase
     assert w.respond_to?(:section_start)
     assert w.respond_to?(:section_end)
     assert w.respond_to?(:entry)
-    assert w.respond_to?(:write!)
+    assert w.respond_to?(:result)
     
     # w = Cheatorious::Writer::Text.new(:name => "VIM", :author => "Luis Cipriani", :description => "Cool!", :version => "1.0.0")
     # 
@@ -26,7 +26,7 @@ class Cheatorious::Writer::TextTest < Test::Unit::TestCase
     # w.section_end
     # w.entry("Movement", "h", "j", "k", "l")
     # w.footer
-    # w.write!
+    # w.result
   end
 
 end

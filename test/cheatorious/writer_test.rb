@@ -15,7 +15,7 @@ class Cheatorious::WriterTest < Test::Unit::TestCase
     # assert w.respond_to?(:section_start)
     # assert w.respond_to?(:section_end)
     # assert w.respond_to?(:entry)
-    # assert w.respond_to?(:write!)
+    # assert w.respond_to?(:result)
   end
   
 end

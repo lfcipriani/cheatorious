@@ -4,7 +4,7 @@ module Cheatorious
       def initialize(cheatsheet_info = {})
         @info          = cheatsheet_info
         @section_stack = []
-        @indentation   = ""
+        @result        = ""
       end
       
       def header
@@ -12,7 +12,7 @@ module Cheatorious
         line "-" * 80
         line "#{@info[:name]} (#{@info[:version]})"
         line
-        line "Author     : #{@info[:name]}"
+        line "Author     : #{@info[:author][0]} (#{@info[:author][1]})"
         line "Description: #{@info[:description]}"
         line "-" * 80
         line
@@ -39,13 +39,14 @@ module Cheatorious
         line e
       end
       
-      def write!
+      def result
+        @result
       end
       
     private
     
       def line(str = "")
-        puts str + "\n"
+        @result += str + "\n"
       end
       
       def indentation(char)
