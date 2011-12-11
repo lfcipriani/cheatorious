@@ -15,8 +15,9 @@ module Cheatorious
       @block      = block
       @keys       = {}
       @cheat_hash = {
+        :info       => { :name => name },
         :cheatsheet => {
-          :root => {},
+          :root    => [],
           :reverse => {}
         }
       }
@@ -31,15 +32,15 @@ module Cheatorious
     end
     
     def description(info) 
-      root["description"] = info
+      root[:info][:description] = info
     end
     
     def version(numbers)
-      root["version"] = numbers.to_s
+      root[:info][:version] = numbers.to_s
     end
     
     def author(*args)
-      root["author"] = args
+      root[:info][:author] = args
     end
     
     def key_separator(separator)
@@ -51,29 +52,33 @@ module Cheatorious
     end
     
     def section(name, &block)
-      @current_section[:sections] = {} unless @current_section.key?(:sections)
-      @current_section[:sections][name] = {} unless @current_section[:sections].key?(name)
       parent_section = @current_section
-      @current_section = @current_section[:sections][name]
+      
+      new_section = { name => [] }
+      @current_section = new_section[name]
       
       @stack.push(name)
       self.instance_eval(&block)
       @stack.pop
       
       @current_section = parent_section
+      @current_section << new_section
     end
     
-    def __(name, *values)
-      @current_section[:entries] = {} unless @current_section.key?(:entries)
-      @current_section[:entries][name] = [] unless @current_section[:entries].key?(name)
+    def __(name, *values) 
+      new_entry = [name]
+      
       values.each do |v|
-        @current_section[:entries][name] << v
+        new_entry << v
+        
         reverse_entry = {
           :name    => name,
           :section => @stack.dup
         }
         reverse_index.key?(v) ? reverse_index[v] << reverse_entry : reverse_index[v] = [reverse_entry]
       end
+      
+      @current_section << new_entry
     end
     
     def method_missing(method, *args)
@@ -103,17 +108,3 @@ module Cheatorious
 
   end
 end
-
-# hash = {
-#   "description" => "bla",
-#   "cheatsheet" => {
-#     :root => {
-#             :entries => { "Save File" => [":w"] },
-#             :sections => { "files" => {} }
-#      }
-#     :reverse => {
-#                ":w" => [{:name => 'blah', :section => []}, {}],
-#                ":e" => [{}]
-#             }
-#
-# }

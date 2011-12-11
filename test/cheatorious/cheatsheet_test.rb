@@ -19,9 +19,9 @@ class Cheatorious::CheatSheetTest < Test::Unit::TestCase
       version     "1.0.0"
     end
     
-    assert_equal "A personal VIM reference"                     , c["description"]
-    assert_equal ["Luis Cipriani", "URL of the author or email"], c["author"]
-    assert_equal "1.0.0"                                        , c["version"]   
+    assert_equal "A personal VIM reference"                     , c[:info][:description]
+    assert_equal ["Luis Cipriani", "URL of the author or email"], c[:info][:author]
+    assert_equal "1.0.0"                                        , c[:info][:version]   
   end
   
   def test_meta_information_is_nil_otherwise
@@ -29,9 +29,9 @@ class Cheatorious::CheatSheetTest < Test::Unit::TestCase
       # stuff
     end
     
-    assert_nil c["description"]
-    assert_nil c["author"]
-    assert_nil c["version"]   
+    assert_nil c[:info][:description]
+    assert_nil c[:info][:author]
+    assert_nil c[:info][:version]   
   end
 
   def test_cheatsheet_simple_entry
@@ -39,7 +39,8 @@ class Cheatorious::CheatSheetTest < Test::Unit::TestCase
       __ "Save file", ":w"
     end
     
-    assert_equal ":w", c[:cheatsheet][:root][:entries]["Save file"].first
+    assert_equal "Save file", c[:cheatsheet][:root].first[0]
+    assert_equal ":w"       , c[:cheatsheet][:root].first[1]
   end
   
   def test_cheatsheet_simple_entry_with_several_options
@@ -47,9 +48,9 @@ class Cheatorious::CheatSheetTest < Test::Unit::TestCase
       __ "Go to insertion mode", "i", "I", "a"
     end
     
-    assert_equal "i", c[:cheatsheet][:root][:entries]["Go to insertion mode"][0]
-    assert_equal "I", c[:cheatsheet][:root][:entries]["Go to insertion mode"][1]
-    assert_equal "a", c[:cheatsheet][:root][:entries]["Go to insertion mode"][2]
+    assert_equal "i", c[:cheatsheet][:root].first[1]
+    assert_equal "I", c[:cheatsheet][:root].first[2]
+    assert_equal "a", c[:cheatsheet][:root].first[3]
   end
   
   def test_cheatsheet_section
@@ -60,8 +61,8 @@ class Cheatorious::CheatSheetTest < Test::Unit::TestCase
       end
     end
     
-    assert_equal ":w", c[:cheatsheet][:root][:sections]["Files"][:entries]["Save file"].first
-    assert_equal ":e", c[:cheatsheet][:root][:sections]["Files"][:entries]["Open file"].first
+    assert_equal ":w", c[:cheatsheet][:root].first["Files"][0][1]
+    assert_equal ":e", c[:cheatsheet][:root].first["Files"][1][1]
   end
   
   def test_cheatsheet_section_inside_section
@@ -75,8 +76,8 @@ class Cheatorious::CheatSheetTest < Test::Unit::TestCase
       end
     end
     
-    assert_equal ":w", c[:cheatsheet][:root][:sections]["Files"][:sections]["Saving"][:entries]["Save file"].first
-    assert_equal ":e", c[:cheatsheet][:root][:sections]["Files"][:entries]["Open file"].first
+    assert_equal ":e", c[:cheatsheet][:root].first["Files"][0][1]
+    assert_equal ":w", c[:cheatsheet][:root].first["Files"][1]["Saving"][0][1]
   end
 
   def test_cheatsheet_keyboard_key_configurations
@@ -86,7 +87,7 @@ class Cheatorious::CheatSheetTest < Test::Unit::TestCase
       __ "Scroll line up", _control("E")
     end
     
-    assert_equal "^E", c[:cheatsheet][:root][:entries]["Scroll line up"].first
+    assert_equal "^E", c[:cheatsheet][:root].first[1]
   end
   
   def test_cheatsheet_keyboard_key_multiple_configurations
@@ -96,8 +97,8 @@ class Cheatorious::CheatSheetTest < Test::Unit::TestCase
       __ "Scroll line up, down", _control("E"), (_control "Y")
     end
     
-    assert_equal "^E", c[:cheatsheet][:root][:entries]["Scroll line up, down"][0]
-    assert_equal "^Y", c[:cheatsheet][:root][:entries]["Scroll line up, down"][1]
+    assert_equal "^E", c[:cheatsheet][:root].first[1]
+    assert_equal "^Y", c[:cheatsheet][:root].first[2]
   end
   
   def test_cheatsheet_keyboard_key_separators
@@ -112,8 +113,8 @@ class Cheatorious::CheatSheetTest < Test::Unit::TestCase
       __ "Just pressing control", _control
     end
     
-    assert_equal "^+SHIFT+ALT+A", c[:cheatsheet][:root][:entries]["Do something crazy"][0]
-    assert_equal "^"            , c[:cheatsheet][:root][:entries]["Just pressing control"][0]
+    assert_equal "^+SHIFT+ALT+A", c[:cheatsheet][:root][0][1]
+    assert_equal "^"            , c[:cheatsheet][:root][1][1]
   end
   
   def test_cheatsheet_reverse_index
