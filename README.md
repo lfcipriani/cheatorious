@@ -86,10 +86,21 @@ I'm working to let this usage even more simple and fast.
 * case sensitive search
 * better ouput layout, colored
 * more features in command line
+* other output writers
 
 ## Tips ##
 
-* In Macs, cheatorious is very powerful if used with (http://decimus.net/DTerm)[DTerm]
+* In Macs, cheatorious is very powerful if used with [DTerm](http://decimus.net/DTerm)
+
+## Contributing ##
+
+You can contribute in the Core, with Writers or Cheatsheets, feel free.
+
+* Fork
+* Implement tests
+* Implement feature
+* Test it
+* Pull request
 
 ----
 _Copyright (c) 2011 Luis Cipriani (under MIT license)_
