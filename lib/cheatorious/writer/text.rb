@@ -18,6 +18,13 @@ module Cheatorious
         line
       end
       
+      def search_header(query, results_count, query_type)
+        line
+        line "Your search for '#{query}' returned #{results_count} #{results_count > 1 ? "entries" : "entry"}:" if results_count != 0
+        line "Your search for '#{query}' doesn't returned any entry. Try with another keyword." if results_count == 0
+        line
+      end
+      
       def footer
         line
         line "-" * 80
