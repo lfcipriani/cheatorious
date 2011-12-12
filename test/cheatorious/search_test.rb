@@ -48,6 +48,43 @@ class Cheatorious::SearchTest < Test::Unit::TestCase
     assert_not_nil result.index("Scrolling")
     assert_not_nil result.index("^ E")
   end
-  
+
+  def test_simple_keyword_search
+    result = Cheatorious::Search.execute(cheatsheet_model, "scroll")
+    
+    assert_not_nil result.index("2 entries")
+    assert_nil result.index("Enter insertion mode")
+    assert_not_nil result.index("Scrolling")
+    assert_not_nil result.index("^ E")
+    assert_not_nil result.index("^ F")
+    assert_nil result.index("Open file")
+    assert_nil result.index("Files")
+  end  
+
+  def test_simple_keyword_search_for_root_entry
+    result = Cheatorious::Search.execute(cheatsheet_model, "exit insertion")
+    
+    assert_not_nil result.index("1 entry")
+    assert_not_nil result.index("Exit insertion mode")
+    assert_nil result.index("Scrolling")
+    assert_nil result.index("Files")
+    assert_nil result.index("Saving")
+  end
+
+  def test_simple_keyword_search_from_the_deep
+    result = Cheatorious::Search.execute(cheatsheet_model, "save")
+    
+    assert_not_nil result.index("1 entry")
+    assert_not_nil result.index("Save file")
+    assert_nil result.index("Scrolling")
+    assert_not_nil result.index("Files")
+    assert_not_nil result.index("Saving")
+  end
+
+  def test_non_existant_keyword
+    result = Cheatorious::Search.execute(cheatsheet_model, "buzzword")
+    
+    assert_not_nil result.index("Try with another keyword")
+  end
   
 end
