@@ -13,6 +13,8 @@ Gem::Specification.new do |s|
   s.version       = Cheatorious::VERSION
   s.platform      = Gem::Platform::RUBY
   s.summary       = "generator of simple, searchable, command line cheatsheets"
+  s.bindir        = "bin"
+  s.executables   = ["cheatorious"]
   s.require_paths = ['lib']
   excepts = %w[
     .gitignore
