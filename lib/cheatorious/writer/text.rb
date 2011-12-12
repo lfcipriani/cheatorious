@@ -1,19 +1,18 @@
 module Cheatorious
   module Writer    
     class Text
-      def initialize(cheatsheet_info = {})
-        @info          = cheatsheet_info
+      def initialize
         @section_stack = []
         @result        = ""
       end
       
-      def header
+      def header(name, author = "", version = "", description = "")
         line
         line "-" * 80
-        line "#{@info[:name]} (#{@info[:version]})"
+        line "#{name} (#{version})"
         line
-        line "Author     : #{@info[:author][0]} (#{@info[:author][1]})"
-        line "Description: #{@info[:description]}"
+        line "Author     : #{author[0]} (#{author[1]})"
+        line "Description: #{description}"
         line "-" * 80
         line
       end

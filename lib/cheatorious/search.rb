@@ -14,6 +14,7 @@ module Cheatorious
     end
     
     def execute(query = "", writer = Writer::Text, options = {})
+      info = @cheat_model[:info]
       options[:print] = query.empty? ? :full : :partial
       
       filtered = @cheat_model[:cheatsheet][:root].dup
@@ -21,8 +22,8 @@ module Cheatorious
         filtered, results_count = depth_search(query, filtered, options)
       end
       
-      w = writer.new(@cheat_model[:info])
-      print_full?(options) ? w.header : w.search_header(query, results_count, "")
+      w = writer.new
+      print_full?(options) ? w.header(info[:name], info[:author], info[:version], info[:description]) : w.search_header(query, results_count, "")
       write_contents(filtered, w, options)
       w.footer if print_full?(options)
       
