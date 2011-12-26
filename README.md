@@ -91,6 +91,7 @@ I'm working to let this usage even more simple and fast.
 ## Tips ##
 
 * In Macs, cheatorious is very powerful if used with [DTerm](http://decimus.net/DTerm)
+* Create aliases to save typings
 
 ## Contributing ##
 

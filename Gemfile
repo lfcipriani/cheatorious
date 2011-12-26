@@ -3,6 +3,7 @@ source :rubygems
 
 # Main dependencies
 gem "rake"
+gem "thor"
 
 # Other dependencies
 group :test do

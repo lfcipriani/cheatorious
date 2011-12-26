@@ -7,6 +7,7 @@ require "bundler/setup"
 
 # Gem requirements
 module Cheatorious
+  autoload :CLI       , "cheatorious/cli"
   autoload :CheatSheet, "cheatorious/cheatsheet"
   autoload :Utils     , "cheatorious/utils"
   autoload :Search    , "cheatorious/search"

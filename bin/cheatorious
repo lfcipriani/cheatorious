@@ -1,19 +1,4 @@
 #!/usr/bin/env ruby
-@cheatsheet_model = nil
-def cheatsheet_for(name, &block)
-  @cheatsheet_model = Cheatorious::CheatSheet.compile(name, &block)
-end
+require File.expand_path(File.dirname(__FILE__) + '/../lib/cheatorious')
 
-if ARGV.size > 0
-  require File.expand_path(File.dirname(__FILE__) + '/../lib/cheatorious')
-  
-  if File.exist?(ARGV[0])
-    load ARGV[0]
-    result = Cheatorious::Search.execute(@cheatsheet_model, ARGV[1] || "")
-    puts result
-  else
-    puts "File not found: #{ARGV[0]}"
-  end
-else
-  puts "Usage: cheatorious cheatsheet_file [keyword]"
-end
+Cheatorious::CLI.start
