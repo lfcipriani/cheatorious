@@ -17,8 +17,7 @@ module Cheatorious
       @cheat_hash = {
         :info       => { :name => name },
         :cheatsheet => {
-          :root    => [],
-          :reverse => {}
+          :root    => []
         }
       }
       @current_section = @cheat_hash[:cheatsheet][:root]
@@ -70,12 +69,6 @@ module Cheatorious
       
       values.each do |v|
         new_entry << v
-        
-        reverse_entry = {
-          :name    => name,
-          :section => @stack.dup
-        }
-        reverse_index.key?(v) ? reverse_index[v] << reverse_entry : reverse_index[v] = [reverse_entry]
       end
       
       @current_section << new_entry
@@ -101,10 +94,6 @@ module Cheatorious
     def sheet
       @cheat_hash[:cheatsheet]
     end
-
-    def reverse_index
-      @cheat_hash[:cheatsheet][:reverse]
-    end
-
+    
   end
 end
