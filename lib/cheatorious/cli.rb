@@ -77,6 +77,16 @@ module Cheatorious
       end
     end
     
+    desc "alias NAME CHEATSHEET [OPTIONS]", "show an alias command with NAME for easy access to searching a CHEATSHEET.\nThe CHEATSHEET variable must be an imported cheatsheet.\nExample: cheatorious alias svim simple_vim >> ~/.bashrc"
+    def alias(name, cheatsheet)
+      ensure_workspace_exist
+      if cheatsheet_list.include?(cheatsheet)
+        puts "alias #{name}='cheatorious search #{cheatsheet}'"
+      else
+        puts "Invalid cheatsheet name: #{cheatsheet}"
+      end
+    end
+    
   private
 
     def cheatsheet_list

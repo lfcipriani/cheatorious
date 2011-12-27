@@ -111,6 +111,15 @@ class Cheatorious::CliTest < Test::Unit::TestCase
     assert_not_nil out.string.index("Invalid writer name, use 'cheatorious writers'")
   end
   
+  def test_alias
+    out = capture_stdout do
+      Cheatorious::CLI.start(["import", example_path + "/simple_vim.rb"])
+      Cheatorious::CLI.start(["alias", "svim", "simple_vim"])
+    end
+
+    assert_not_nil out.string.index("alias svim='cheatorious search simple_vim'")
+  end
+  
 private
   
   def example_path
