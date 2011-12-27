@@ -43,6 +43,15 @@ class Cheatorious::CliTest < Test::Unit::TestCase
     assert_not_nil out.string.index("The specified file doesn't exist")
   end
   
+  def test_view
+    out = capture_stdout do
+      Cheatorious::CLI.start(["import", example_path + "/simple_vim.rb"])
+      Cheatorious::CLI.start(["view", "simple_vim"])
+    end
+
+    assert_not_nil out.string.index("^ E")
+  end
+  
   def test_search_on_file
     out = capture_stdout do
       Cheatorious::CLI.start(["search", example_path + "/simple_vim.rb", "scroll line up"])
