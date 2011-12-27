@@ -2,8 +2,8 @@ require 'thor'
 
 module Cheatorious
   module DslExecutor
-    def self.cheatsheet_for(name, output = :bytes, &block)
-      Cheatorious::CheatSheet.compile(name, output, &block)
+    def self.cheatsheet_for(name, &block)
+      Cheatorious::CheatSheet.compile(name, @output, &block)
     end
   end
   
@@ -14,40 +14,81 @@ module Cheatorious
     def list
       ensure_workspace_exist
       puts (cheatsheet_list.empty? ? "You don't have imported cheatsheets. See 'import' command." : "You have #{cheatsheet_list.size} cheatsheet(s):")
-      puts cheatsheet_list.map {|c| File.basename(c)}.join("\n")
+      puts cheatsheet_list.join("\n")
     end
     
-    desc "import FILE NAME", "import a cheatsheet FILE with optional NAME specified"
-    def import(file, name)
+    desc "import FILE", "import a cheatsheet FILE"
+    def import(file)
       ensure_workspace_exist
+      name = File.basename(file, ".rb")
+      return if cheatsheet_list.include?(name) && 
+                !yes?("Do you want to override the existent #{name} cheatsheet? (y/n)")
       if File.exist?(file)
         source = File.read(file)
-        bytes = DslExecutor.module_eval(source)
+        bytes = DslExecutor.module_eval("@output = :bytes\n"+source)
         File.open(File.join(workspace_path, "compiled", name), 'w') {|f| f.write(bytes) }
-        File.open(File.join(workspace_path, "originals", name), 'w') {|f| f.write(source) }
-        puts "Cheatsheet imported successfuly! Try 'cheatorious view #{name}'"
+        File.open(File.join(workspace_path, "originals", name + ".rb"), 'w') {|f| f.write(source) }
+        puts "Cheatsheet imported successfuly! Try 'cheatorious view #{name}'\nThe original cheatsheet file was copied to #{File.join(workspace_path, "originals", name + ".rb")}"
       else
         puts "The specified file doesn't exist: #{file}"
       end
     end
     
-    desc "view CHEATSHEET [OPTIONS]", "view a CHEATSHEET.\nThe CHEATSHEET variable could be a name or a file."
-    method_option :writer, :aliases => "-w", :type => :string, :desc => "writer to use for the output"
+    desc "view CHEATSHEET [OPTIONS]", "view a CHEATSHEET.\nThe CHEATSHEET variable could be a name (imported cheatsheets) or a file that describes a cheatsheet"
+    method_option :writer, :aliases => "-w", :type => :string, :desc => "writer to use for the output. If not set, uses the default."
     def view(cheatsheet)
+      invoke :search
     end
     
-    desc "search CHEATSHEET [KEYWORD] [OPTIONS]", "view or search for KEYWORD in a CHEATSHEET\nThe CHEATSHEET variable could be a name or a file"
+    desc "search CHEATSHEET [KEYWORD] [OPTIONS]", "view or search for KEYWORD in a CHEATSHEET.\nThe CHEATSHEET variable could be a name (imported cheatsheets) or a file that describes a cheatsheet"
     method_option :section, :aliases => "-s", :type => :boolean, :desc => "matches keyword on section names, returning all entries inside it"
     method_option :reverse, :aliases => "-r", :type => :boolean, :desc => "matches values of cheatsheet, do reverse search"
     method_option :sensitive, :aliases => "-S", :type => :boolean, :desc => "case sensitive search"
-    method_option :writer, :aliases => "-w", :type => :string, :desc => "writer to use for the output"
+    method_option :writer, :aliases => "-w", :type => :string, :desc => "writer to use for the output. If not set, uses the default."
     def search(cheatsheet, keyword = "")
+      ensure_workspace_exist
+      writer = options["writer"] ? writer_for(options["writer"]) : default_writer
+      if cheatsheet_list.include?(cheatsheet)
+        model = File.read(File.join(workspace_path, "compiled", cheatsheet))
+      elsif File.exist?(cheatsheet)
+        model = DslExecutor.module_eval("@output = nil\n" + File.read(cheatsheet))
+      end
+      puts Cheatorious::Search.execute(model, keyword, writer)
+    end
+
+    desc "writers [OPTIONS]", "lists the available writers or set a default"
+    method_option :default, :aliases => "-d", :type => :string, :desc => "set a default writer for following searches"
+    def writers
+      ensure_workspace_exist
+      if options["default"]
+        if Cheatorious::Writer.constants.map {|c| c.to_s}.include?(options["default"])
+          config = YAML.load(File.open(File.join(workspace_path, "config")))
+          config["default_writer"] = options["default"]
+          File.open(File.join(workspace_path, "config"), "w") {|f| f.write(config.to_yaml) }
+          puts "The default writer now is #{options["default"]}"
+        else
+          puts "Invalid writer name, use 'cheatorious writers' to choose one from the available."
+        end
+      else
+        puts "The following writers are available:\n"
+        dw = default_writer.to_s
+        puts Cheatorious::Writer.constants.map {|w| (dw.end_with?(w.to_s) ? w.to_s + " (default)" : w.to_s) }.join("\n")
+        puts "\nUse -d option to set a default writer."
+      end
     end
     
   private
 
     def cheatsheet_list
-      Dir[File.join(workspace_path, "compiled", "*")]
+      Dir[File.join(workspace_path, "compiled", "*")].map {|c| File.basename(c)}
+    end
+
+    def writer_for(constant)
+      Cheatorious::Writer.const_get(constant)
+    end
+
+    def default_writer
+      writer_for(YAML.load(File.open(File.join(workspace_path, "config")))["default_writer"])
     end
     
     def ensure_workspace_exist
