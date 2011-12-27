@@ -53,7 +53,7 @@ module Cheatorious
       elsif File.exist?(cheatsheet)
         model = DslExecutor.module_eval("@output = nil\n" + File.read(cheatsheet))
       end
-      puts Cheatorious::Search.execute(model, keyword, writer)
+      puts Cheatorious::Search.execute(model, keyword, writer, options.dup)
     end
 
     desc "writers [OPTIONS]", "lists the available writers or set a default"

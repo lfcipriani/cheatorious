@@ -87,4 +87,18 @@ class Cheatorious::SearchTest < Test::Unit::TestCase
     assert_not_nil result.index("Try with another keyword")
   end
   
+  def test_reverse_search
+    result = Cheatorious::Search.execute(cheatsheet_model, "^ E", Cheatorious::Writer::Text, "reverse" => true)
+    
+    assert_not_nil result.index("scroll line up, down")
+    assert_not_nil result.index("Scrolling")
+    assert_nil result.index("scroll page up, down")
+  end
+  
+  def test_reverse_search_again
+    result = Cheatorious::Search.execute(cheatsheet_model, "h", Cheatorious::Writer::Text, "reverse" => true)
+    
+    assert_not_nil result.index("character left, right, line up, line down")
+    assert_nil result.index("word/token left, right")
+  end
 end

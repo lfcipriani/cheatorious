@@ -33,22 +33,37 @@ module Cheatorious
   private
   
     def depth_search(query, section, options)
+      reverse = options["reverse"]
       match_count = 0
+      
       result = section.select do |item|
+        
         if item.kind_of?(Array) #entry
           name = item[0]
-          result = match?(query, name)
-          match_count += 1 if result
-          result
+          matched = false
+          if reverse
+            item[1..-1].each do |value|
+              matched = match?(query, value)
+              break if matched
+            end
+          else
+            matched = match?(query, name)
+          end
+          match_count += 1 if matched
+          matched
+          
         elsif item.kind_of?(Hash) #section
           name = item.keys.first
           item[name], count = depth_search(query, item[name], options)
           match_count += count
           item[name].size > 0
+          
         else
           false
         end
+        
       end
+      
       return result, match_count
     end
   
