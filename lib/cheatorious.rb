@@ -5,6 +5,15 @@ $:.unshift(File.dirname(__FILE__)) unless $:.include?(File.dirname(__FILE__))
 require "rubygems"
 require "bundler/setup"
 
+# Adding Dir.home method if it's not available
+unless Dir.respond_to?(:home)
+  class Dir
+    def self.home
+      File.expand_path(File.join("~"))
+    end
+  end
+end
+
 # Gem requirements
 module Cheatorious
   autoload :CLI       , "cheatorious/cli"

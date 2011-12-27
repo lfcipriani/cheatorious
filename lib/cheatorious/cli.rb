@@ -107,7 +107,7 @@ module Cheatorious
     end
     
     def workspace_path
-      File.join(Dir.home, ".cheatorious")
+      @workspace ||= File.join(Dir.home, ".cheatorious")
     end
   end
 end
