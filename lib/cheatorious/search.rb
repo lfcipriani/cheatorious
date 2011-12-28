@@ -16,13 +16,19 @@ module Cheatorious
     def execute(query = "", writer = Writer::Text, options = {})
       info = @cheat_model[:info]
       
+      # Filtering
       filtered = @cheat_model[:cheatsheet][:root].dup
       unless print_full?(query, options)
-        filtered, results_count = depth_search(query, filtered, options)
+        if options["section"]
+          filtered, results_count = section_search(query, filtered, false, options)
+        else
+          filtered, results_count = depth_search(query, filtered, options)
+        end
       end
       
+      # Writing
       w = writer.new
-      print_full?(query, options) ? w.header(info[:name], info[:author], info[:version], info[:description]) : w.search_header(query, results_count, "")
+      print_full?(query, options) ? w.header(info[:name], info[:author], info[:version], info[:description]) : w.search_header(query, results_count, options)
       write_contents(filtered, w, options)
       w.footer if print_full?(query, options)
       
@@ -63,6 +69,30 @@ module Cheatorious
       end
       
       return result, match_count
+    end
+
+    def section_search(query, section, include_entries, options)
+      match_count = 0
+      
+      result = section.select do |item|
+
+        if item.kind_of?(Array) #entry
+          include_entries
+          
+        elsif item.kind_of?(Hash) #section
+          name = item.keys.first
+          to_include_entries = match?(query, name, options["sensitive"]) || include_entries
+          item[name], count = section_search(query, item[name], to_include_entries, options)
+          (item[name].size > 0) || to_include_entries
+          
+        else
+          false
+        end
+        
+      end
+      
+      return result, 0
+      
     end
   
     def write_contents(section, writer, options)

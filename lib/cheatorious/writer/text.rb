@@ -17,11 +17,17 @@ module Cheatorious
         line
       end
       
-      def search_header(query, results_count, query_type)
-        line
-        line "Your search for '#{query}' returned #{results_count} #{results_count > 1 ? "entries" : "entry"}:" if results_count != 0
-        line "Your search for '#{query}' doesn't returned any entry. Try with another keyword." if results_count == 0
-        line
+      def search_header(query, results_count, options)
+        if options["section"]
+          line
+          line "Your section search returned the following:\n"
+          line
+        else
+          line
+          line "Your search for '#{query}' returned #{results_count} #{results_count > 1 ? "entries" : "entry"}:" if results_count != 0
+          line "Your search for '#{query}' doesn't returned any entry. Try with another keyword." if results_count == 0
+          line
+        end
       end
       
       def footer
