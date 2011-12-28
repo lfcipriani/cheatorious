@@ -15,17 +15,16 @@ module Cheatorious
     
     def execute(query = "", writer = Writer::Text, options = {})
       info = @cheat_model[:info]
-      options[:print] = query.empty? ? :full : :partial
       
       filtered = @cheat_model[:cheatsheet][:root].dup
-      unless print_full?(options)
+      unless print_full?(query, options)
         filtered, results_count = depth_search(query, filtered, options)
       end
       
       w = writer.new
-      print_full?(options) ? w.header(info[:name], info[:author], info[:version], info[:description]) : w.search_header(query, results_count, "")
+      print_full?(query, options) ? w.header(info[:name], info[:author], info[:version], info[:description]) : w.search_header(query, results_count, "")
       write_contents(filtered, w, options)
-      w.footer if print_full?(options)
+      w.footer if print_full?(query, options)
       
       return w.result
     end
@@ -84,8 +83,8 @@ module Cheatorious
       !(Regexp.new(Regexp.escape(query), (sensitive ? 0 : Regexp::IGNORECASE)) =~ name).nil?
     end
   
-    def print_full?(options)
-      options[:print] == :full
+    def print_full?(query, options)
+      query.empty? && !options["section"]
     end
   
   end
