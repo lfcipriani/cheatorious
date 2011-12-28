@@ -33,7 +33,6 @@ module Cheatorious
   private
   
     def depth_search(query, section, options)
-      reverse = options["reverse"]
       match_count = 0
       
       result = section.select do |item|
@@ -41,13 +40,13 @@ module Cheatorious
         if item.kind_of?(Array) #entry
           name = item[0]
           matched = false
-          if reverse
+          if options["reverse"]
             item[1..-1].each do |value|
-              matched = match?(query, value)
+              matched = match?(query, value, options["sensitive"])
               break if matched
             end
           else
-            matched = match?(query, name)
+            matched = match?(query, name, options["sensitive"])
           end
           match_count += 1 if matched
           matched
@@ -81,8 +80,8 @@ module Cheatorious
       end
     end
   
-    def match?(query, name)
-      not name.downcase.index(query.downcase).nil?
+    def match?(query, name, sensitive)
+      !(Regexp.new(Regexp.escape(query), (sensitive ? 0 : Regexp::IGNORECASE)) =~ name).nil?
     end
   
     def print_full?(options)
