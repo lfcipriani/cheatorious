@@ -42,7 +42,7 @@ module Cheatorious
     
     desc "search CHEATSHEET [KEYWORD] [OPTIONS]", "search for KEYWORD in CHEATSHEET entries only.\nThe CHEATSHEET variable could be a name (for imported cheatsheets) or a file that describes a cheatsheet.\nOmit KEYWORD to view the full cheatsheet."
     method_option :section, :aliases => "-s", :type => :boolean, :desc => "matches KEYWORD only on section names, returning all entries and sections inside it."
-    method_option :reverse, :aliases => "-r", :type => :boolean, :desc => "reverse means to search only the values of a cheatsheet (and not entries, as usual).\nFor example, search by shortcuts."
+    method_option :reverse, :aliases => "-r", :type => :boolean, :desc => "reverse means to search only the values of a cheatsheet (and not entries, as usual). For example, search by shortcuts."
     method_option :sensitive, :aliases => "-S", :type => :boolean, :desc => "case sensitive search (insensitive is default)."
     method_option :writer, :aliases => "-w", :type => :string, :desc => "writer to use for the output. If not set, uses the default."
     def search(cheatsheet, keyword = "")
@@ -82,7 +82,7 @@ module Cheatorious
       end
     end
     
-    desc "alias NAME CHEATSHEET [OPTIONS]", "return a shell alias command with NAME for easy access to searching a CHEATSHEET.\nThe CHEATSHEET variable must be an imported cheatsheet.\nExample: cheatorious alias svim simple_vim >> ~/.bashrc\n         next time just use: svim KEYWORD [OPTIONS]"
+    desc "alias NAME CHEATSHEET", "return a shell alias command with NAME for easy access to searching a CHEATSHEET.\nThe CHEATSHEET variable must be an imported cheatsheet.\nExample: cheatorious alias svim simple_vim >> ~/.bashrc\n         next time just use: svim KEYWORD [OPTIONS]"
     def alias(name, cheatsheet)
       ensure_workspace_exist
       if cheatsheet_list.include?(cheatsheet)

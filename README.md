@@ -25,7 +25,7 @@ Create a file and use the following syntax, shown in the example below:
         author      "Luis Cipriani", "github.com/lfcipriani"
         version     "1.0.0"
 
-        # you can configure some keyboard keys variables
+        # you can configure some keyboard keys variables, you can change it later to fit your personal preferences
         key :control, "^"
         key :esc    , "<esc>"
         key :leader , ","
@@ -53,45 +53,77 @@ Create a file and use the following syntax, shown in the example below:
         section "Files" do
             __ "Open file", ":e"
 
-            # you can go infinitely deep with sections
+            # you can go infinitely deep with sections (seriously)
             section "Saving" do
                 __ "Save file", ":w"
             end
         end
     end
 
-## Compiling your cheatsheet ##
-
-In this alpha version, the compilation is transparently done by cheatorious, but in future versions you'll be able to:
-
-* serialize your cheatsheet for exporting
-* export in Base64 to make the search faster
-* export a standalone executable script
-
 ## Using cheatorious ##
 
 The CLI usage goes as follows:
 
-    $ cheatorious cheatsheet_file [keyword]
+    $ cheatorious                           # get help
+    $ cheatorious help [TASK]               # get help for a specific task
+    $ cheatorious import FILE               # import a cheatsheet description FILE (example above)
+    $ cheatorious list                      # lists the available cheatsheets
+    $ cheatorious view CHEATSHEET [OPTIONS] # view a CHEATSHEET
     
-Where *cheatsheet_file* is the file you created above using the ruby DSL and a optional *keyword* if you want to filter the cheatsheet (case insensitive). If no keyword is passed, it will return whole cheatsheet.
+To search on your cheatsheets:
+    
+    $ cheatorious help search
+    Usage:
+      cheatorious search CHEATSHEET [KEYWORD] [OPTIONS]
 
-I'm working to let this usage even more simple and fast.
+    Options:
+      -s, [--section]        # matches KEYWORD only on section names, returning all entries and sections inside it.
+      -r, [--reverse]        # reverse means to search only the values of a cheatsheet (and not entries, as usual). For example, search by shortcuts.
+      -S, [--sensitive]      # case sensitive search (insensitive is default).
+      -w, [--writer=WRITER]  # writer to use for the output. If not set, uses the default.
+
+    search for KEYWORD in CHEATSHEET entries only.
+    The CHEATSHEET variable could be a name (for imported cheatsheets) or a file that describes a cheatsheet.
+    Omit KEYWORD to view the full cheatsheet.
+
+If you are tired to type everything above to do a simple search, use the alias command:
+
+    $ bin/cheatorious help alias
+    Usage:
+      cheatorious alias NAME CHEATSHEET
+
+    return a shell alias command with NAME for easy access to searching a CHEATSHEET.
+    The CHEATSHEET variable must be an imported cheatsheet.
+    Example: cheatorious alias svim simple_vim >> ~/.bashrc
+             next time just use: svim KEYWORD [OPTIONS]
+
+The command will just show the command, it's up to you to decide where to put it.
+
+## Writers ##
+
+Cheatorious has a default Text writer to give a fairly nice output for your cheatsheet. Since we can have multiple writers avaiable, you can list and set a default writer through the command *writers*:
+
+    $ bin/cheatorious help writers
+    Usage:
+      cheatorious writers [OPTIONS]
+
+    Options:
+      -d, [--default=DEFAULT]  # set a default writer for next searches.
+
+    lists the available writers or set a default
+
+I'll work to provide more options of output as soon as possible (markdown, colored, HTML, etc), but you can also contribute writing your own writers and sending a pull request to this project. Check the examples folder to see a Writer sample, you just need to implement that interface.
 
 ## TODO ##
 
-* search by sections
-* reverse search
-* standalone script generation
-* case sensitive search
-* better ouput layout, colored
-* more features in command line
-* other output writers
+* standalone script generation (works indenpendently of cheatorious being installed or not)
+* more writers, better ouput layout, colored
+* more cheatsheets
 
-## Tips ##
+## Tips to improve the experience! ##
 
 * In Macs, cheatorious is very powerful if used with [DTerm](http://decimus.net/DTerm)
-* Create aliases to save typings
+* Create aliases to save typings in the cheatsheets you use more
 
 ## Contributing ##
 
