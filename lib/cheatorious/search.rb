@@ -15,22 +15,19 @@ module Cheatorious
     
     def execute(query = "", writer = Writer::Text, options = {})
       info = @cheat_model[:info]
+      options.delete("reverse") if options["section"] && options["reverse"]
       
       # Filtering
       filtered = @cheat_model[:cheatsheet][:root].dup
-      unless print_full?(query, options)
-        if options["section"]
-          filtered, results_count = section_search(query, filtered, false, options)
-        else
-          filtered, results_count = depth_search(query, filtered, options)
-        end
+      unless print_full?(query)
+        filtered, results_count = depth_search(query, filtered, options)
       end
       
       # Writing
       w = writer.new
-      print_full?(query, options) ? w.header(info[:name], info[:author], info[:version], info[:description]) : w.search_header(query, results_count, options)
+      print_full?(query) ? w.header(info[:name], info[:author], info[:version], info[:description]) : w.search_header(query, results_count, options)
       write_contents(filtered, w, options)
-      w.footer if print_full?(query, options)
+      w.footer if print_full?(query)
       
       return w.result
     end
@@ -43,22 +40,30 @@ module Cheatorious
       result = section.select do |item|
         
         if item.kind_of?(Array) #entry
-          name = item[0]
-          matched = false
-          if options["reverse"]
-            item[1..-1].each do |value|
-              matched = match?(query, value, options["sensitive"])
-              break if matched
+          unless options["section"]
+            name = item[0]
+            matched = false
+            if options["reverse"]
+              item[1..-1].each do |value|
+                matched = match?(query, value, options["sensitive"])
+                break if matched
+              end
+            else
+              matched = match?(query, name, options["sensitive"])
             end
+            match_count += 1 if matched
+            matched
           else
-            matched = match?(query, name, options["sensitive"])
+            false
           end
-          match_count += 1 if matched
-          matched
           
         elsif item.kind_of?(Hash) #section
           name = item.keys.first
-          item[name], count = depth_search(query, item[name], options)
+          if options["section"] && match?(query, name, options["sensitive"])
+            count = 1
+          else
+            item[name], count = depth_search(query, item[name], options)
+          end
           match_count += count
           item[name].size > 0
           
@@ -69,30 +74,6 @@ module Cheatorious
       end
       
       return result, match_count
-    end
-
-    def section_search(query, section, include_entries, options)
-      match_count = 0
-      
-      result = section.select do |item|
-
-        if item.kind_of?(Array) #entry
-          include_entries
-          
-        elsif item.kind_of?(Hash) #section
-          name = item.keys.first
-          to_include_entries = match?(query, name, options["sensitive"]) || include_entries
-          item[name], count = section_search(query, item[name], to_include_entries, options)
-          (item[name].size > 0) || to_include_entries
-          
-        else
-          false
-        end
-        
-      end
-      
-      return result, 0
-      
     end
   
     def write_contents(section, writer, options)
@@ -113,8 +94,8 @@ module Cheatorious
       !(Regexp.new(Regexp.escape(query), (sensitive ? 0 : Regexp::IGNORECASE)) =~ name).nil?
     end
   
-    def print_full?(query, options)
-      query.empty? && !options["section"]
+    def print_full?(query)
+      query.empty?
     end
   
   end

@@ -52,7 +52,7 @@ class Cheatorious::SearchTest < Test::Unit::TestCase
   def test_simple_keyword_search
     result = Cheatorious::Search.execute(cheatsheet_model, "scroll")
     
-    assert_not_nil result.index("2 entries")
+    assert_not_nil result.index("2 results")
     assert_nil result.index("Enter insertion mode")
     assert_not_nil result.index("Scrolling")
     assert_not_nil result.index("^ E")
@@ -64,7 +64,7 @@ class Cheatorious::SearchTest < Test::Unit::TestCase
   def test_simple_keyword_search_for_root_entry
     result = Cheatorious::Search.execute(cheatsheet_model, "exit insertion")
     
-    assert_not_nil result.index("1 entry")
+    assert_not_nil result.index("1 result")
     assert_not_nil result.index("Exit insertion mode")
     assert_nil result.index("Scrolling")
     assert_nil result.index("Files")
@@ -74,7 +74,17 @@ class Cheatorious::SearchTest < Test::Unit::TestCase
   def test_simple_keyword_search_from_the_deep
     result = Cheatorious::Search.execute(cheatsheet_model, "save")
     
-    assert_not_nil result.index("1 entry")
+    assert_not_nil result.index("1 result")
+    assert_not_nil result.index("Save file")
+    assert_nil result.index("Scrolling")
+    assert_not_nil result.index("Files")
+    assert_not_nil result.index("Saving")
+  end
+
+  def test_simple_keyword_search_from_the_deep
+    result = Cheatorious::Search.execute(cheatsheet_model, "save")
+    
+    assert_not_nil result.index("1 result")
     assert_not_nil result.index("Save file")
     assert_nil result.index("Scrolling")
     assert_not_nil result.index("Files")
@@ -85,6 +95,24 @@ class Cheatorious::SearchTest < Test::Unit::TestCase
     result = Cheatorious::Search.execute(cheatsheet_model, "buzzword")
     
     assert_not_nil result.index("Try with another keyword")
+  end
+  
+  def test_section_keyword_matching_returning_entire_section
+    result = Cheatorious::Search.execute(cheatsheet_model, "basic", Cheatorious::Writer::Text, "section" => true)
+
+    assert_not_nil result.index("Basic Movement")
+    assert_not_nil result.index("character left, right, line up, line down")
+    assert_not_nil result.index("word/token left, right")
+    assert_nil result.index("Enter insertion mode")
+  end
+
+  def test_deep_section_keyword_matching_returning_entire_section
+    result = Cheatorious::Search.execute(cheatsheet_model, "saving", Cheatorious::Writer::Text, "section" => true)
+    
+    assert_not_nil result.index("Files")
+    assert_not_nil result.index("Save file")
+    assert_not_nil result.index(":w")
+    assert_nil result.index("Open file")
   end
   
   def test_reverse_search
@@ -98,7 +126,7 @@ class Cheatorious::SearchTest < Test::Unit::TestCase
   def test_reverse_search_sensitive
     result = Cheatorious::Search.execute(cheatsheet_model, "^ e", Cheatorious::Writer::Text, "reverse" => true, "sensitive" => true)
 
-    assert_not_nil result.index("Your search for '^ e' doesn't returned any entry")
+    assert_not_nil result.index("search for '^ e' doesn't returned any result")
   end
   
   def test_reverse_search_again
@@ -106,24 +134,6 @@ class Cheatorious::SearchTest < Test::Unit::TestCase
     
     assert_not_nil result.index("character left, right, line up, line down")
     assert_nil result.index("word/token left, right")
-  end
-  
-  def test_section_search
-    result = Cheatorious::Search.execute(cheatsheet_model, "files", Cheatorious::Writer::Text, "section" => true)
-
-    assert_not_nil result.index("Open file")
-    assert_not_nil result.index(":w")
-    assert_nil result.index("scroll")
-    assert_nil result.index("insertion")
-  end
-  
-  def test_section_search_again
-    result = Cheatorious::Search.execute(cheatsheet_model, "saving", Cheatorious::Writer::Text, "section" => true)
-
-    assert_nil result.index("Open file")
-    assert_not_nil result.index(":w")
-    assert_nil result.index("scroll")
-    assert_nil result.index("insertion")
   end
   
 end
