@@ -3,7 +3,7 @@ source :rubygems
 
 # Main dependencies
 gem "rake"
-gem "thor"
+gem "thor", ">= 0.14.6"
 
 # Other dependencies
 group :test do
