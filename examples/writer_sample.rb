@@ -1,5 +1,10 @@
 module Cheatorious
   module Writer    
+    # This is an example of a Writer
+    #
+    # To implement your own Writer, just create a class inside 
+    # Cheatorious::Writer module and implement the interface 
+    # represented by the public methods below.
     class WriterSample
       def initialize
         @section_stack = []
@@ -17,10 +22,12 @@ module Cheatorious
         line
       end
       
-      def search_header(query, results_count, query_type)
+      def search_header(query, results_count, options)
+        search_type = options.keys.join(", ")
+        search_type += " " if search_type.size > 0
         line
-        line "Your search for '#{query}' returned #{results_count} #{results_count > 1 ? "entries" : "entry"}:" if results_count != 0
-        line "Your search for '#{query}' doesn't returned any entry. Try with another keyword." if results_count == 0
+        line "Your #{search_type}search for '#{query}' returned #{results_count} #{results_count > 1 ? "results" : "result"}:" if results_count != 0
+        line "Your #{search_type}search for '#{query}' doesn't returned any result. Try with another keyword." if results_count == 0
         line
       end
       

@@ -18,16 +18,12 @@ module Cheatorious
       end
       
       def search_header(query, results_count, options)
-        if options["section"]
-          line
-          line "Your section search returned the following:\n"
-          line
-        else
-          line
-          line "Your search for '#{query}' returned #{results_count} #{results_count > 1 ? "entries" : "entry"}:" if results_count != 0
-          line "Your search for '#{query}' doesn't returned any entry. Try with another keyword." if results_count == 0
-          line
-        end
+        search_type = options.keys.join(", ")
+        search_type += " " if search_type.size > 0
+        line
+        line "Your #{search_type}search for '#{query}' returned #{results_count} #{results_count > 1 ? "results" : "result"}:" if results_count != 0
+        line "Your #{search_type}search for '#{query}' doesn't returned any result. Try with another keyword." if results_count == 0
+        line
       end
       
       def footer
