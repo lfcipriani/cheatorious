@@ -3,36 +3,33 @@ require File.expand_path(File.dirname(__FILE__) + '/../test_helper')
 
 class Cheatorious::CliTest < Test::Unit::TestCase
 
-  def teardown
-    FileUtils.rm_rf(File.expand_path(File.join(Dir.home, ".cheatorious")))
+  def setup
+    FileUtils.cp(example_path + "/simple_vim.rb", example_path + "/simple_vim_test.rb")
   end
 
-  def test_empty_list
-    out = capture_stdout do
-      Cheatorious::CLI.start(["list"])
-    end
-
-    assert_not_nil out.string.index("You don't have imported cheatsheets")
+  def teardown
+    FileUtils.rm_rf(File.expand_path(File.join(Dir.home, ".cheatorious")))
+    FileUtils.rm(example_path + "/simple_vim_test.rb")
   end
   
   def test_list
     out = capture_stdout do
-      Cheatorious::CLI.start(["import", example_path + "/simple_vim.rb"])
+      Cheatorious::CLI.start(["import", example_path + "/simple_vim_test.rb"])
       Cheatorious::CLI.start(["list"])
     end
 
-    assert_not_nil out.string.index("You have 1 cheatsheet(s)")
-    assert_not_nil out.string.index("simple_vim")
+    assert_not_nil out.string.index("You have 2 cheatsheet(s)")
+    assert_not_nil out.string.index("simple_vim_test")
   end
   
   def test_import
     out = capture_stdout do
-      Cheatorious::CLI.start(["import", example_path + "/simple_vim.rb"])
+      Cheatorious::CLI.start(["import", example_path + "/simple_vim_test.rb"])
     end
 
     assert_not_nil out.string.index("Cheatsheet imported successfuly!")
-    assert File.exist?(File.join(Dir.home, ".cheatorious", "compiled", "simple_vim"))
-    assert File.exist?(File.join(Dir.home, ".cheatorious", "originals", "simple_vim.rb"))
+    assert File.exist?(File.join(Dir.home, ".cheatorious", "compiled", "simple_vim_test"))
+    assert File.exist?(File.join(Dir.home, ".cheatorious", "originals", "simple_vim_test.rb"))
   end
   
   def test_import_wrong_file
@@ -45,8 +42,8 @@ class Cheatorious::CliTest < Test::Unit::TestCase
   
   def test_view
     out = capture_stdout do
-      Cheatorious::CLI.start(["import", example_path + "/simple_vim.rb"])
-      Cheatorious::CLI.start(["view", "simple_vim"])
+      Cheatorious::CLI.start(["import", example_path + "/simple_vim_test.rb"])
+      Cheatorious::CLI.start(["view", "simple_vim_test"])
     end
 
     assert_not_nil out.string.index("^ E")
@@ -54,7 +51,7 @@ class Cheatorious::CliTest < Test::Unit::TestCase
   
   def test_search_on_file
     out = capture_stdout do
-      Cheatorious::CLI.start(["search", example_path + "/simple_vim.rb", "scroll line up"])
+      Cheatorious::CLI.start(["search", example_path + "/simple_vim_test.rb", "scroll line up"])
     end
 
     assert_not_nil out.string.index("^ E")
@@ -62,8 +59,8 @@ class Cheatorious::CliTest < Test::Unit::TestCase
   
   def test_search_on_previously_imported_cheatsheet
     out = capture_stdout do
-      Cheatorious::CLI.start(["import", example_path + "/simple_vim.rb"])
-      Cheatorious::CLI.start(["search", "simple_vim", "scroll line up"])
+      Cheatorious::CLI.start(["import", example_path + "/simple_vim_test.rb"])
+      Cheatorious::CLI.start(["search", "simple_vim_test", "scroll line up"])
     end
 
     assert_not_nil out.string.index("^ E")
@@ -72,8 +69,8 @@ class Cheatorious::CliTest < Test::Unit::TestCase
   def test_search_with_another_writer
     load example_path + "/writer_sample.rb"
     out = capture_stdout do
-      Cheatorious::CLI.start(["import", example_path + "/simple_vim.rb"])
-      Cheatorious::CLI.start(["search", "simple_vim", "scroll line up", "-w=WriterSample"])
+      Cheatorious::CLI.start(["import", example_path + "/simple_vim_test.rb"])
+      Cheatorious::CLI.start(["search", "simple_vim_test", "scroll line up", "-w=WriterSample"])
     end
 
     assert_not_nil out.string.index("^ E")
@@ -113,11 +110,11 @@ class Cheatorious::CliTest < Test::Unit::TestCase
   
   def test_alias
     out = capture_stdout do
-      Cheatorious::CLI.start(["import", example_path + "/simple_vim.rb"])
-      Cheatorious::CLI.start(["alias", "svim", "simple_vim"])
+      Cheatorious::CLI.start(["import", example_path + "/simple_vim_test.rb"])
+      Cheatorious::CLI.start(["alias", "svim", "simple_vim_test"])
     end
 
-    assert_not_nil out.string.index("alias svim='cheatorious search simple_vim'")
+    assert_not_nil out.string.index("alias svim='cheatorious search simple_vim_test'")
   end
   
 private

@@ -115,9 +115,11 @@ module Cheatorious
       end
       unless File.directory?(File.join(workspace_path, "compiled"))
         Dir.mkdir(File.join(workspace_path, "compiled"))
+        FileUtils.cp(File.expand_path(File.join(__FILE__, "..", "..", "..", "examples", "simple_vim")), File.join(workspace_path, "compiled"))
       end
       unless File.directory?(File.join(workspace_path, "originals"))
         Dir.mkdir(File.join(workspace_path, "originals"))
+        FileUtils.cp(File.expand_path(File.join(__FILE__, "..", "..", "..", "examples", "simple_vim.rb")), File.join(workspace_path, "originals"))
       end
     end
     
