@@ -114,20 +114,23 @@ Cheatorious has a default Text writer to give a fairly nice output for your chea
 
 I'll work to provide more options of output as soon as possible (markdown, colored, HTML, etc), but you can also contribute writing your own writers and sending a pull request to this project. Check the examples folder to see a Writer sample, you just need to implement that interface.
 
+## Tips to improve the experience! ##
+
+* In Macs, cheatorious is very powerful if used with [DTerm](http://decimus.net/DTerm)
+* Create aliases to save typings in the cheatsheets you use more
+* Sync your cheatsheets with Dropbox by creating a symlink for the `~/.cheatorious` folder
+
 ## TODO ##
 
 * standalone script generation (works indenpendently of cheatorious being installed or not)
 * more writers, better ouput layout, colored
 * more cheatsheets
 
-## Tips to improve the experience! ##
-
-* In Macs, cheatorious is very powerful if used with [DTerm](http://decimus.net/DTerm)
-* Create aliases to save typings in the cheatsheets you use more
-
 ## Contributing ##
 
-You can contribute in the Core, with Writers or Cheatsheets, feel free.
+If you have cheatsheets, share with us at [cheatorious cheatsheet repository](https://github.com/lfcipriani/cheatorious-cheatsheets).
+
+You can also contribute in the Core or Writers, feel free to:
 
 * Fork
 * Implement tests
