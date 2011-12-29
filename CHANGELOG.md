@@ -1,4 +1,11 @@
-#v0.2.0 (Dec/29 2011 09:59 -0200 by Luis Cipriani)
+
+#v0.2.1 (Dec/29 2011 10:40 -0200 by Luis Cipriani)
+
+    Bugfixes:
+
+      - Added Thor runtime dependency in gemspec
+
+# v0.2.0 (Dec/29 2011 09:59 -0200 by Luis Cipriani) #
 
     Changes:
 
