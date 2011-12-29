@@ -97,7 +97,7 @@ If you are tired to type everything above to do a simple search, use the alias c
     Example: cheatorious alias svim simple_vim >> ~/.bashrc
              next time just use: svim KEYWORD [OPTIONS]
 
-The command will just show the command, it's up to you to decide where to put it.
+It will just **show** the alias command, it's up to you to decide where to put it.
 
 ## Writers ##
 
