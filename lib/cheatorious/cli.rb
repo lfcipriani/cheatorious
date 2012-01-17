@@ -25,7 +25,7 @@ module Cheatorious
       return if cheatsheet_list.include?(name) &&
                 !yes?("Do you want to override the existent #{name} cheatsheet? (y/n)")
       if File.exist?(file)
-        source = File.read(file)
+        source = File.read(file, :encoding => "UTF-8")
         bytes = DslExecutor.module_eval("@output = :bytes\n"+source)
         File.open(File.join(workspace_path, "compiled", name), 'w') {|f| f.write(bytes) }
         File.open(File.join(workspace_path, "originals", name + ".rb"), 'w') {|f| f.write(source) }
@@ -51,9 +51,9 @@ module Cheatorious
       writer = options["writer"] ? writer_for(options["writer"]) : default_writer
       model = nil
       if cheatsheet_list.include?(cheatsheet)
-        model = File.read(File.join(workspace_path, "compiled", cheatsheet))
+        model = File.read(File.join(workspace_path, "compiled", cheatsheet), :encoding => "UTF-8")
       elsif File.exist?(cheatsheet)
-        model = DslExecutor.module_eval("@output = nil\n" + File.read(cheatsheet))
+        model = DslExecutor.module_eval("@output = nil\n" + File.read(cheatsheet, :encoding => "UTF-8"))
       end
       if model
         puts Cheatorious::Search.execute(model, keyword, writer, options.dup)
