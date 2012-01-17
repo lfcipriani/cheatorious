@@ -1,6 +1,6 @@
 # cheatorious
 
-_"Being victorious through a means so amazing it cannot possibly be achieved without cheating."_ 
+_"Being victorious through a means so amazing it cannot possibly be achieved without cheating."_
 (Urban Dictionary)
 
 [![Build Status](https://secure.travis-ci.org/lfcipriani/cheatorious.png)](http://travis-ci.org/lfcipriani/cheatorious)
@@ -12,7 +12,7 @@ Cheatsheets are very good to start learning or keep knowledge of some language o
 ## Install ##
 
     gem install cheatorious
-    
+
 Cheatorious is compatible with ruby 1.8.x, 1.9.x, rubinius, jruby, ree and more.
 
 ## Creating your Cheatsheet ##
@@ -29,7 +29,7 @@ Create a file and use the following syntax, shown in the example below:
         key :control, "^"
         key :esc    , "<esc>"
         key :leader , ","
-        
+
         # your prefered keyboard keys separators (default is empty string)
         key_separator " "
 
@@ -69,9 +69,9 @@ The CLI usage goes as follows:
     $ cheatorious import FILE               # import a cheatsheet description FILE (example above)
     $ cheatorious list                      # lists the available cheatsheets
     $ cheatorious view CHEATSHEET [OPTIONS] # view a CHEATSHEET
-    
+
 To search on your cheatsheets:
-    
+
     $ cheatorious help search
     Usage:
       cheatorious search CHEATSHEET [KEYWORD] [OPTIONS]
@@ -139,4 +139,4 @@ You can also contribute in the Core or Writers, feel free to:
 * Pull request
 
 ----
-_Copyright (c) 2011 Luis Cipriani (under MIT license)_
+_Copyright (c) 2011-2012 Luis Cipriani (under MIT license)_
