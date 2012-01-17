@@ -1,12 +1,8 @@
 # encoding: UTF-8
-lib = File.expand_path('../lib', __FILE__)
-$:.unshift lib unless $:.include?(lib)
+lib = File.expand_path('../lib' , __FILE__)
+$:.unshift(lib) unless $:.include?(lib)
 
-version_file = File.expand_path "../GEM_VERSION", __FILE__
-File.delete version_file if File.exists? version_file
-
-require 'step-up'
-require 'cheatorious'
+require 'cheatorious/version'
 
 Gem::Specification.new do |s|
   s.name          = "cheatorious"
@@ -24,7 +20,7 @@ Gem::Specification.new do |s|
     Rakefile
   ]
   tests = `git ls-files -- {script,test}/*`.split("\n")
-  s.files = `git ls-files`.split("\n") - excepts - tests + %w[GEM_VERSION]
+  s.files = `git ls-files`.split("\n") - excepts - tests
 
   s.author        = "Luis Cipriani"
   s.email         = "lfcipriani@gmail.com"
@@ -32,7 +28,6 @@ Gem::Specification.new do |s|
 
   s.add_runtime_dependency('thor', '>= 0.14.6')
 
-  # s.add_development_dependency('cover_me')
-  # s.add_development_dependency('ruby-debug19')
   s.add_development_dependency('step-up')
+  s.add_development_dependency('rake')
 end
