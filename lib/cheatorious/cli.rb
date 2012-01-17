@@ -1,4 +1,5 @@
 require 'thor'
+require 'yaml'
 
 module Cheatorious
   module DslExecutor
@@ -6,22 +7,22 @@ module Cheatorious
       Cheatorious::CheatSheet.compile(name, @output, &block)
     end
   end
-  
+
   class CLI < Thor
     include Thor::Actions
-    
+
     desc "list", "lists the available cheatsheets. See 'import' command."
     def list
       ensure_workspace_exist
       puts (cheatsheet_list.empty? ? "You don't have imported cheatsheets. See 'import' command." : "You have #{cheatsheet_list.size} cheatsheet(s):")
       puts cheatsheet_list.join("\n")
     end
-    
+
     desc "import FILE", "import a cheatsheet description FILE.\nCheck https://github.com/lfcipriani/cheatorious to learn how to create your own cheatsheets."
     def import(file)
       ensure_workspace_exist
       name = File.basename(file, ".rb")
-      return if cheatsheet_list.include?(name) && 
+      return if cheatsheet_list.include?(name) &&
                 !yes?("Do you want to override the existent #{name} cheatsheet? (y/n)")
       if File.exist?(file)
         source = File.read(file)
@@ -33,13 +34,13 @@ module Cheatorious
         puts "The specified file doesn't exist: #{file}"
       end
     end
-    
+
     desc "view CHEATSHEET [OPTIONS]", "view a CHEATSHEET.\nThe CHEATSHEET variable could be a name (for imported cheatsheets) or a file that describes a cheatsheet."
     method_option :writer, :aliases => "-w", :type => :string, :desc => "writer to use for the output. If not set, uses the default."
     def view(cheatsheet)
       invoke :search
     end
-    
+
     desc "search CHEATSHEET [KEYWORD] [OPTIONS]", "search for KEYWORD in CHEATSHEET entries only.\nThe CHEATSHEET variable could be a name (for imported cheatsheets) or a file that describes a cheatsheet.\nOmit KEYWORD to view the full cheatsheet."
     method_option :section, :aliases => "-s", :type => :boolean, :desc => "matches KEYWORD only on section names, returning all entries and sections inside it."
     method_option :reverse, :aliases => "-r", :type => :boolean, :desc => "reverse means to search only the values of a cheatsheet (and not entries, as usual). For example, search by shortcuts."
@@ -81,7 +82,7 @@ module Cheatorious
         puts "\nUse -d option to set a default writer."
       end
     end
-    
+
     desc "alias NAME CHEATSHEET", "return a shell alias command with NAME for easy access to searching a CHEATSHEET.\nThe CHEATSHEET variable must be an imported cheatsheet.\nExample: cheatorious alias svim simple_vim >> ~/.bashrc\n         next time just use: svim KEYWORD [OPTIONS]"
     def alias(name, cheatsheet)
       ensure_workspace_exist
@@ -91,7 +92,7 @@ module Cheatorious
         puts "Invalid cheatsheet name: #{cheatsheet}"
       end
     end
-    
+
   private
 
     def cheatsheet_list
@@ -105,7 +106,7 @@ module Cheatorious
     def default_writer
       writer_for(YAML.load(File.open(File.join(workspace_path, "config")))["default_writer"])
     end
-    
+
     def ensure_workspace_exist
       unless File.directory?(workspace_path)
         Dir.mkdir(workspace_path)
@@ -122,7 +123,7 @@ module Cheatorious
         FileUtils.cp(File.expand_path(File.join(__FILE__, "..", "..", "..", "examples", "simple_vim.rb")), File.join(workspace_path, "originals"))
       end
     end
-    
+
     def workspace_path
       @workspace ||= File.join(Dir.home, ".cheatorious")
     end
