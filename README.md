@@ -120,6 +120,10 @@ I'll work to provide more options of output as soon as possible (markdown, color
 * Create aliases to save typings in the cheatsheets you use more
 * Sync your cheatsheets with Dropbox by creating a symlink for the `~/.cheatorious` folder
 
+## Known Issues ##
+
+* DTerm don't set LANG environment variable, so there may be some errors when using a cheatsheet that include special characters.
+
 ## TODO ##
 
 * standalone script generation (works indenpendently of cheatorious being installed or not)
