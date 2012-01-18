@@ -31,7 +31,7 @@ module Cheatorious
       def search_header(query, results_count, options)
         @query = query
         @options = options
-        search_type = options.keys.join(", ")
+        search_type = (options.keys - ["writer"]).join(", ")
         search_type += " " if search_type.size > 0
         line "Your #{search_type}search for '#{query.dup.foreground(@color)}' returned #{results_count} #{results_count > 1 ? "results" : "result"}:" if results_count != 0
         line "Your #{search_type}search for '#{query.dup.foreground(@color)}' doesn't returned any result. Try with another keyword." if results_count == 0
