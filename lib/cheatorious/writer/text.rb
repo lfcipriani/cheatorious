@@ -42,7 +42,7 @@ module Cheatorious
         @section_stack.push(section)
         section = paint(section,@query) if @query && @options['section']
         line
-        line indentation(" ") + ">".foreground(:red) + " #{section} "+ "<".foreground(:red)
+        line indentation(" ") + "#".foreground(:red) + " #{section} "+ "#".foreground(:red)
       end
 
       def section_end
