@@ -8,10 +8,11 @@ module Cheatorious
         @result        = ""
         @query         = nil
         @options       = {}
+        @color         = :yellow
+        @add_empty_line = true
       end
 
       def header(name, author = "", version = "", description = "")
-        line
         line "-" * 80
         line "#{name} (#{version})"
         line
@@ -26,9 +27,8 @@ module Cheatorious
         @options = options
         search_type = options.keys.join(", ")
         search_type += " " if search_type.size > 0
-        line
-        line "Your #{search_type}search for '#{query}' returned #{results_count} #{results_count > 1 ? "results" : "result"}:" if results_count != 0
-        line "Your #{search_type}search for '#{query}' doesn't returned any result. Try with another keyword." if results_count == 0
+        line "Your #{search_type}search for '#{query.dup.foreground(@color)}' returned #{results_count} #{results_count > 1 ? "results" : "result"}:" if results_count != 0
+        line "Your #{search_type}search for '#{query.dup.foreground(@color)}' doesn't returned any result. Try with another keyword." if results_count == 0
         line
       end
 
@@ -41,11 +41,13 @@ module Cheatorious
       def section_start(section)
         @section_stack.push(section)
         section = paint(section,@query) if @query && @options['section']
-        line indentation("-") + " #{section}"
+        line
+        line indentation(" ") + ">".foreground(:red) + " #{section} "+ "<".foreground(:red)
       end
 
       def section_end
         @section_stack.pop
+        line
       end
 
       def entry(name, *values)
@@ -55,7 +57,7 @@ module Cheatorious
         elsif !@options['section']
           name = paint(name,@query) if @query
         end
-        e = "#{indentation(" ")} #{name}: "
+        e = "#{indentation(" ")}   #{name} " + "=> ".foreground(:blue)
         e << value_text
         line e
       end
@@ -67,15 +69,23 @@ module Cheatorious
     private
 
       def line(str = "")
-        @result += str + "\n"
+        if str.empty?
+          if @add_empty_line
+            @result += str + "\n"
+            @add_empty_line = false
+          end
+        else
+          @result += str + "\n"
+          @add_empty_line = true
+        end
       end
 
       def indentation(char)
-        char * 2 * @section_stack.size
+        char * 3 * @section_stack.size
       end
 
       def paint(string, query)
-        string.gsub(regex_for(query)) {|q| q.foreground(:yellow)}
+        string.gsub(regex_for(query)) {|q| q.foreground(@color)}
       end
 
       def regex_for(query)
