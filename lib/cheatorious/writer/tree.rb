@@ -75,7 +75,7 @@ module Cheatorious
 
       def result
         @result = @header_footer[0]
-        @result += Hirb::Helpers::Tree.render(@tree, :type => :directory)
+        @result += Hirb::Helpers::Tree.render(@tree, :type => :directory, :multi_line_nodes => true)
         @result += @header_footer[1] || ""
       end
 
