@@ -40,6 +40,14 @@ class Cheatorious::SearchTest < Test::Unit::TestCase
     end
   end
 
+  def setup
+    Sickill::Rainbow.enabled = false
+  end
+
+  def teardown
+    Sickill::Rainbow.enabled = true
+  end
+
   def test_empty_search_prints_full_cheatsheet
     result = Cheatorious::Search.execute(cheatsheet_model)
 
@@ -65,7 +73,7 @@ class Cheatorious::SearchTest < Test::Unit::TestCase
     result = Cheatorious::Search.execute(cheatsheet_model, "exit insertion")
 
     assert_not_nil result.index("1 result")
-    assert_not_nil result.index("\e[33mExit insertion\e[0m mode")
+    assert_not_nil result.index("Exit insertion mode")
     assert_nil result.index("Scrolling")
     assert_nil result.index("Files")
     assert_nil result.index("Saving")
@@ -85,7 +93,7 @@ class Cheatorious::SearchTest < Test::Unit::TestCase
     result = Cheatorious::Search.execute(cheatsheet_model, "save")
 
     assert_not_nil result.index("1 result")
-    assert_not_nil result.index("\e[33mSave\e[0m file")
+    assert_not_nil result.index("Save file")
     assert_nil result.index("Scrolling")
     assert_not_nil result.index("Files")
     assert_not_nil result.index("Saving")
@@ -100,7 +108,7 @@ class Cheatorious::SearchTest < Test::Unit::TestCase
   def test_section_keyword_matching_returning_entire_section
     result = Cheatorious::Search.execute(cheatsheet_model, "basic", Cheatorious::Writer::Text, "section" => true)
 
-    assert_not_nil result.index("\e[33mBasic\e[0m Movement")
+    assert_not_nil result.index("Basic Movement")
     assert_not_nil result.index("character left, right, line up, line down")
     assert_not_nil result.index("word/token left, right")
     assert_nil result.index("Enter insertion mode")
