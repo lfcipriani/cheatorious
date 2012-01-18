@@ -1,3 +1,4 @@
+# encoding: UTF-8
 require 'thor'
 require 'yaml'
 
@@ -92,6 +93,18 @@ module Cheatorious
         puts "Invalid cheatsheet name: #{cheatsheet}"
       end
     end
+
+    desc "edit CHEATSHEET", "edit an existent CHEATSHEET"
+    def edit(cheatsheet)
+      ensure_workspace_exist
+      if cheatsheet_list.include?(cheatsheet)
+        editor = %w( CHEATORIOUS_EDITOR BUNDLER_EDITOR VISUAL EDITOR ).map { |var| ENV[var] }.compact.first || 'vi'
+        exec editor + " " + File.join(workspace_path, "originals", cheatsheet + ".rb")
+      else
+        puts "Invalid cheatsheet name: #{cheatsheet}"
+      end
+    end
+
 
   private
 
