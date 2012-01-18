@@ -101,10 +101,33 @@ module Cheatorious
         editor = %w( CHEATORIOUS_EDITOR BUNDLER_EDITOR VISUAL EDITOR ).map { |var| ENV[var] }.compact.first || 'vi'
         exec editor + " " + File.join(workspace_path, "originals", cheatsheet + ".rb")
       else
-        puts "Invalid cheatsheet name: #{cheatsheet}"
+        puts "Invalid cheatsheet name: #{cheatsheet}. Use 'list' command to check the name."
       end
     end
 
+    desc "reload CHEATSHEET", "reload a CHEATSHEET after editing it with 'edit' command"
+    def reload(cheatsheet)
+      ensure_workspace_exist
+      if cheatsheet_list.include?(cheatsheet)
+        source = File.read(File.join(workspace_path, "originals", cheatsheet + ".rb"))
+        bytes = DslExecutor.module_eval("@output = :bytes\n"+source)
+        File.open(File.join(workspace_path, "compiled", cheatsheet), 'w') {|f| f.write(bytes) }
+        puts "Cheatsheet reloaded successfuly! Try 'cheatorious view #{cheatsheet}'"
+      else
+        puts "Invalid cheatsheet name: #{cheatsheet}. Use 'list' command to check the name."
+      end
+    end
+
+    desc "remove CHEATSHEET", "remove a CHEATSHEET. The original file is kept for later recovering"
+    def remove(cheatsheet)
+      ensure_workspace_exist
+      if cheatsheet_list.include?(cheatsheet)
+        FileUtils.rm(File.join(workspace_path, "compiled", cheatsheet))
+        puts "Cheatsheet removed successfuly! To recover it execute 'import' command for " + File.join(workspace_path, "originals", cheatsheet + ".rb")
+      else
+        puts "Invalid cheatsheet name: #{cheatsheet}. Use 'list' command to check the name."
+      end
+    end
 
   private
 
