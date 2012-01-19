@@ -1,3 +1,20 @@
+#v0.3.0 (Jan/18 2012 22:28 -0200 by Luis Cipriani)
+
+    Changes:
+
+      - Removed bundler runtime dependency
+      - Simplified gemspec
+
+    Bugfixes:
+
+      - Added yaml require to cli (duh)
+      - Fixed lots of tiny bugs
+
+    Features:
+
+      - Colorful and better output for Text writer
+      - New commands to CLI: edit, reload and remove cheatsheets
+      - Added new Writer: Tree (using hirb)
 
 #v0.2.1 (Dec/29 2011 10:40 -0200 by Luis Cipriani)
 
