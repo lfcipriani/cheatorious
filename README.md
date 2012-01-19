@@ -62,13 +62,15 @@ Create a file and use the following syntax, shown in the example below:
 
 ## Using cheatorious ##
 
-The CLI usage goes as follows:
+The basic CLI usage goes as follows:
 
     $ cheatorious                           # get help
     $ cheatorious help [TASK]               # get help for a specific task
     $ cheatorious import FILE               # import a cheatsheet description FILE (example above)
     $ cheatorious list                      # lists the available cheatsheets
     $ cheatorious view CHEATSHEET [OPTIONS] # view a CHEATSHEET
+
+### Searching ###
 
 To search on your cheatsheets:
 
@@ -86,6 +88,8 @@ To search on your cheatsheets:
     The CHEATSHEET variable could be a name (for imported cheatsheets) or a file that describes a cheatsheet.
     Omit KEYWORD to view the full cheatsheet.
 
+### Alias ###
+
 If you are tired to type everything above to do a simple search, use the alias command:
 
     $ bin/cheatorious help alias
@@ -98,6 +102,12 @@ If you are tired to type everything above to do a simple search, use the alias c
              next time just use: svim KEYWORD [OPTIONS]
 
 It will just **show** the alias command, it's up to you to decide where to put it.
+
+### Editing, reloading, removing ###
+
+    $ cheatorious edit CHEATSHEET    # edit an existent CHEATSHEET. Will open it in the default terminal editor, use CHEATORIOUS_EDITOR environment variable to use another.
+    $ cheatorious reload CHEATSHEET  # reload a CHEATSHEET after editing it with 'edit' command
+    $ cheatorious remove CHEATSHEET  # remove a CHEATSHEET. The original file is kept for later recovering
 
 ## Writers ##
 
@@ -116,13 +126,8 @@ I'll work to provide more options of output as soon as possible (markdown, color
 
 ## Tips to improve the experience! ##
 
-* In Macs, cheatorious is very powerful if used with [DTerm](http://decimus.net/DTerm)
 * Create aliases to save typings in the cheatsheets you use more
 * Sync your cheatsheets with Dropbox by creating a symlink for the `~/.cheatorious` folder
-
-## Known Issues ##
-
-* DTerm don't set LANG environment variable, so there may be some errors when using a cheatsheet that include special characters.
 
 ## TODO ##
 

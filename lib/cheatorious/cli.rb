@@ -19,7 +19,7 @@ module Cheatorious
       puts cheatsheet_list.join("\n")
     end
 
-    desc "import FILE", "import a cheatsheet description FILE.\nCheck https://github.com/lfcipriani/cheatorious to learn how to create your own cheatsheets."
+    desc "import FILE", "import a cheatsheet description FILE.\nCheck https://github.com/lfcipriani/cheatorious to learn how to create your own cheatsheets.\nCheck https://github.com/lfcipriani/cheatorious-cheatsheets for cheatsheets created by the community."
     def import(file)
       ensure_workspace_exist
       name = File.basename(file, ".rb")
@@ -94,7 +94,7 @@ module Cheatorious
       end
     end
 
-    desc "edit CHEATSHEET", "edit an existent CHEATSHEET"
+    desc "edit CHEATSHEET", "edit an existent CHEATSHEET. Will open it in the default terminal editor, use CHEATORIOUS_EDITOR environment variable to use another."
     def edit(cheatsheet)
       ensure_workspace_exist
       if cheatsheet_list.include?(cheatsheet)
