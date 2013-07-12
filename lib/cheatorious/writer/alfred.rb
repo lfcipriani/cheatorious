@@ -44,7 +44,7 @@ module Cheatorious
           line "    <title>#{value_text}</title>"
           line "    <subtitle>#{@section_stack.join(" > ")} > #{name}</subtitle>"
         end
-        line "    <icon type=\"fileicon\">/Applications/MacVim.app</icon>"
+        line "    <icon></icon>"
         line "  </item>"
       end
 
