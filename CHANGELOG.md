@@ -1,3 +1,9 @@
+#v0.4.1 (Jul/12 2013 19:17 -0300 by Luis Cipriani)
+
+    Bugfixes:
+
+      - Tiny fix on the output argument for Alfred Writer
+
 #v0.4.0 (Jul/12 2013 18:52 -0300 by Luis Cipriani)
 
     Changes:
