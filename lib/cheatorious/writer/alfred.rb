@@ -35,12 +35,13 @@ module Cheatorious
       end
 
       def entry(name, *values)
-        line "  <item arg=\"#{name}\">"
         value_text = values.join(", ")
         if @options['reverse']
+          line "  <item arg=\"#{name}\">"
           line "    <subtitle>#{value_text}</subtitle>"
           line "    <title>#{@section_stack.join(" > ")} > #{name}</title>"
         else
+          line "  <item arg=\"#{value_text}\">"
           line "    <title>#{value_text}</title>"
           line "    <subtitle>#{@section_stack.join(" > ")} > #{name}</subtitle>"
         end
