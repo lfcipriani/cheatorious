@@ -9,6 +9,15 @@ _"Being victorious through a means so amazing it cannot possibly be achieved wit
 
 Cheatsheets are very good to start learning or keep knowledge of some language or tool, but very often you just don't have the proper cheatsheet at hand when you need to remember that cryptic keyboard shortcut. Furthermore, wouldn't be nice to keep or create your own cheatsheets in a neat ruby DSL? Wouldn't be great if you have easy access to them, such as via command-line interface?
 
+## TL;DR; ##
+
+* Install Cheatorious: gem install cheatorious
+* Import a cheatsheet from [cheatorious cheatsheet repository](https://github.com/lfcipriani/cheatorious-cheatsheets).
+* Create your cheatsheet
+* Check examples folder in repository
+* Type `cheatorious search CHEATSHEETNAME KEYWORD` or `cheatorious view` to access your cheatsheets
+* If you use Alfred 2, download the Cheatorious workflow in examples folder
+
 ## Install ##
 
     gem install cheatorious
