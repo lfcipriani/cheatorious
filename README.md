@@ -13,7 +13,7 @@ Cheatsheets are very good to start learning or keep knowledge of some language o
 
     gem install cheatorious
 
-Cheatorious is compatible with ruby 1.8.x, 1.9.x, rubinius, jruby, ree and more.
+Cheatorious is compatible with ruby 1.8.x, 1.9.x, 2.0.x, rubinius, jruby, ree and more.
 
 ## Creating your Cheatsheet ##
 
@@ -64,11 +64,17 @@ Create a file and use the following syntax, shown in the example below:
 
 The basic CLI usage goes as follows:
 
-    $ cheatorious                           # get help
-    $ cheatorious help [TASK]               # get help for a specific task
-    $ cheatorious import FILE               # import a cheatsheet description FILE (example above)
-    $ cheatorious list                      # lists the available cheatsheets
-    $ cheatorious view CHEATSHEET [OPTIONS] # view a CHEATSHEET
+    $ cheatorious                                        # get help
+    $ cheatorious view CHEATSHEET [OPTIONS]              # view a CHEATSHEET. The CHEATSHEET variable could be a name (for imported cheatsheets) or a file that describes a cheatsheet.
+    $ cheatorious search CHEATSHEET [KEYWORD] [OPTIONS]  # search for KEYWORD in CHEATSHEET entries only. The CHEATSHEET variable could be a name (for imported cheatsheets) or a file that describes a che...
+    $ cheatorious alias NAME CHEATSHEET                  # return a shell alias command with NAME for easy access to searching a CHEATSHEET. The CHEATSHEET variable must be an imported cheatsheet. Exampl...
+    $ cheatorious edit CHEATSHEET                        # edit an existent CHEATSHEET. Will open it in the default terminal editor, use CHEATORIOUS_EDITOR environment variable to use another.
+    $ cheatorious import FILE                            # import a cheatsheet description FILE. Check https://github.com/lfcipriani/cheatorious to learn how to create your own cheatsheets. Check https:/...
+    $ cheatorious list                                   # lists the available cheatsheets. See 'import' command.
+    $ cheatorious reload CHEATSHEET                      # reload a CHEATSHEET after editing it with 'edit' command
+    $ cheatorious remove CHEATSHEET                      # remove a CHEATSHEET. The original file is kept for later recovering
+    $ cheatorious writers [OPTIONS]                      # lists the available writers or set a default
+    $ cheatorious help [COMMAND]                         # Describe available commands or one specific command
 
 ### Searching ###
 

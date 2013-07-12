@@ -1,3 +1,13 @@
+#v0.4.0 (Jul/12 2013 18:52 -0300 by Luis Cipriani)
+
+    Changes:
+
+      - Now footer appears while viewing or searching cheatsheets
+
+    Features:
+
+      - New Writer for Alfred 2 allow you to create Cheatorious workflows
+
 #v0.3.0 (Jan/18 2012 22:28 -0200 by Luis Cipriani)
 
     Changes:
