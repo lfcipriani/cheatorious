@@ -27,7 +27,7 @@ module Cheatorious
       w = writer.new
       print_full?(query) ? w.header(info[:name], info[:author], info[:version], info[:description]) : w.search_header(query, results_count, options)
       write_contents(filtered, w, options)
-      w.footer if print_full?(query)
+      w.footer 
       
       return w.result
     end
