@@ -164,3 +164,7 @@ You can also contribute in the Core or Writers, feel free to:
 
 ----
 _Copyright (c) 2011-2012 Luis Cipriani (under MIT license)_
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/lfcipriani/cheatorious/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
